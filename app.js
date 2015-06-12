@@ -30,6 +30,23 @@ function getSuggestions(text, callback) {
 
 app.use('/', express.static('public'));
 
+app.get('/queries', function (req, res) {
+	resultsCollection.find({}, {_id:0, query:1}).toArray(
+		function(err, docs) {
+			if(docs) {
+				docs = docs.map(function(doc) {
+					return doc.query;
+				});
+				res.json({
+					count: docs.length,
+					queries: docs
+				})
+			} else {
+				res.sendStatus(500);
+			}
+	});
+})
+
 app.get('/search', function (req, res) {
 	var query = req.query.q;
 	console.log('/search?q=' + query);
