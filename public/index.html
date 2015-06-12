@@ -46,23 +46,15 @@
     <script>
 var alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 function search(text) {
-  console.log(text);
-  // var q = text.replace(/ /g, '+');
   if(text) {
     var results = $('#results');
-    var unique = new Set();
     results.empty();
-    alphabet.forEach(function(letter) {
-      console.log(text + ' ' + letter);
-      $.getJSON('/search', {q: text + ' ' + letter}, function(res) {
-        res.forEach(function(result) {
-          if(!unique.has(result)) {
-            unique.add(result);
-            var p = $('<p>');
-            p.text(result);
-            results.append(p);
-          }
-        })
+    $.getJSON('/search', { q: text }, function(res) {
+      console.log(res);
+      res.forEach(function(result) {
+        var p = $('<p>');
+        p.text(result);
+        results.append(p);
       })
     })
   }

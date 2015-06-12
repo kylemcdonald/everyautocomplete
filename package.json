@@ -9,7 +9,9 @@
   "author": "Kyle McDonald",
   "license": "MIT",
   "dependencies": {
+    "async": "^1.2.1",
     "express": "^4.12.4",
+    "lodash": "^3.9.3",
     "mongodb": "^2.0.33",
     "request": "^2.57.0"
   }
