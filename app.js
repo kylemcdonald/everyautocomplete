@@ -28,12 +28,11 @@ app.get('/search', function (req, res) {
 	  		}
 	  	}
 	  	console.log(queries);
-	  	resultsCollection.insert(queries.map(function(query) {
-	  		return {
-	  			search: q,
-	  			result: query
-	  		}
-	  	}));
+	  	if(queries.length) {
+		  	resultsCollection.insert(queries.map(function(query) {
+		  		return { search: q, result: query }
+		  	}));
+		  }
 	  	res.json(queries);
 	  } else {
 	  	res.sendStatus(500);
