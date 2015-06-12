@@ -32,17 +32,27 @@ app.use('/', express.static('public'));
 
 app.get('/search', function (req, res) {
 	var query = req.query.q;
+	console.log('/search?q=' + query);
 	if(!query) {
 		res.sendStatus(500);
 		return;
 	}
-	console.log(query);
-    async.map(alphabet.map(function(letter) {
-    	return query + ' ' + letter;
-    }), getSuggestions, function(err, results) {
-	    var unique = _.uniq(_.flatten(results, true));
-		resultsCollection.insert({ query: query, results: unique });
-	  	res.json(unique);
+	query = query.trim().toLowerCase();
+	resultsCollection.findOne( { query: query }, { _id: 0, results: 1 },
+		function(err, doc) {
+	      if (doc) {
+	      	console.log('Cached: ' + query);
+	      	res.json(doc.results);
+	      } else {
+	      	console.log('Lookup: ' + query);
+		    async.map(alphabet.map(function(letter) {
+		    	return query + ' ' + letter;
+		    }), getSuggestions, function(err, results) {
+			    var unique = _.uniq(_.flatten(results, true));
+				resultsCollection.insert({ query: query, results: unique });
+			  	res.json(unique);
+		    });
+	      }
     });
 });
 

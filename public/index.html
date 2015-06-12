@@ -18,7 +18,16 @@
     <![endif]-->
     <style>
     body { padding-top: 70px; }
-    p { margin: 0 20px; }
+    a, a:hover, a:active {
+      display: block;
+      margin: 0 20px;
+      text-decoration: none !important;
+      color: black !important;
+    }
+    a:visited {
+      text-decoration: none !important;
+      color: #ccc !important;
+    }
     </style>
   </head>
   <body>
@@ -44,7 +53,6 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
     <script>
-var alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 function search(text) {
   if(text) {
     var results = $('#results');
@@ -52,9 +60,11 @@ function search(text) {
     $.getJSON('/search', { q: text }, function(res) {
       console.log(res);
       res.forEach(function(result) {
-        var p = $('<p>');
-        p.text(result);
-        results.append(p);
+        var row = $('<a>');
+        row.attr('href', 'http://www.google.com/search?q=' + result);
+        row.attr('target', '_blank');
+        row.text(result);
+        results.append(row);
       })
     })
   }
