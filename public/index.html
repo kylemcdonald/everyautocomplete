@@ -18,15 +18,11 @@
     <![endif]-->
     <style>
     body { padding-top: 70px; }
-    a, a:hover, a:active {
-      display: block;
+    a {
+      display: inline-block;
+      float: left;
+      clear: both;
       margin: 0 20px;
-      text-decoration: none !important;
-      color: black !important;
-    }
-    a:visited {
-      text-decoration: none !important;
-      color: #ccc !important;
     }
     </style>
   </head>
@@ -39,9 +35,9 @@
           <span class="input-group-btn">
             <input class="btn btn-default" type="submit" value="Search"></input>
           </span>
-        </form><!-- /input-group -->
-      </div><!-- /.col-lg-6 -->
-    </div><!-- /.row -->
+        </form>
+      </div>
+    </div>
     </nav>
 
     <div id="results">
@@ -70,11 +66,27 @@ function search(text) {
   }
 }
 
+function spaceToPlus(str) {
+  return  str.replace(/ /g, '+');
+}
+
+function plusToSpace(str) {
+  return  str.replace(/\+/g, ' ');
+}
+
 $(function() {
   $('#search').submit(function(e) {
     e.preventDefault();
-    search($('#query').val());
+    var query = $('#query').val();
+    window.location.hash = spaceToPlus(query);
+    search(query);
   })
+
+  if(window.location.hash) {
+    var query = plusToSpace(window.location.hash.substr(1));
+    $('#query').val(query);
+    search(query);
+  }
 })
     </script>
   </body>
