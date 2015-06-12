@@ -1,7 +1,7 @@
 {
-  "name": "boring-filter",
+  "name": "everyautocomplete",
   "version": "1.0.0",
-  "description": "Filter boring words.",
+  "description": "Get every Google autocomplete result.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,6 +9,7 @@
   "author": "Kyle McDonald",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.12.4"
+    "express": "^4.12.4",
+    "request": "^2.57.0"
   }
 }
