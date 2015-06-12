@@ -23,6 +23,8 @@ function getSuggestions(text, callback) {
 					results.push(suggestions[i]);
 				}
 			}
+		} else {
+			console.log('Error requesting Google suggestions: ' + error);
 		}
 		callback(null, results);
 	})
@@ -55,21 +57,27 @@ app.get('/search', function (req, res) {
 		return;
 	}
 	query = query.trim().toLowerCase();
+	console.log('searching results for ' + query);
 	resultsCollection.findOne( { query: query }, { _id: 0, results: 1 },
 		function(err, doc) {
-	      if (doc) {
-	      	console.log('Cached: ' + query);
-	      	res.json(doc.results);
-	      } else {
-	      	console.log('Lookup: ' + query);
-		    async.map(alphabet.map(function(letter) {
-		    	return query + ' ' + letter;
-		    }), getSuggestions, function(err, results) {
-			    var unique = _.uniq(_.flatten(results, true));
-				resultsCollection.insert({ query: query, results: unique });
-			  	res.json(unique);
-		    });
-	      }
+			if(err) {
+				console.log('Database error: ' + err);
+				res.sendStatus(500);
+				return;
+			}
+			if (doc) {
+				console.log('Cached: ' + query);
+				res.json(doc.results);
+			} else {
+				console.log('Lookup: ' + query);
+				async.map(alphabet.map(function(letter) {
+					return query + ' ' + letter;
+				}), getSuggestions, function(err, results) {
+				    var unique = _.uniq(_.flatten(results, true));
+					resultsCollection.insert({ query: query, results: unique });
+				  	res.json(unique);
+				});
+			}
     });
 });
 
