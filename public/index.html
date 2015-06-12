@@ -18,11 +18,14 @@
     <![endif]-->
     <style>
     body { padding-top: 70px; }
-    a {
+    a, p {
       display: inline-block;
       float: left;
       clear: both;
       margin: 0 20px;
+    }
+    p {
+      font-style: italic;
     }
     </style>
   </head>
@@ -62,6 +65,11 @@ function search(text) {
         row.text(result);
         results.append(row);
       })
+      if(res.length == 0) {
+        var row = $('<p>');
+        row.text('Google has no suggestions for "' + text + '".');
+        results.append(row);
+      }
     })
   }
 }
