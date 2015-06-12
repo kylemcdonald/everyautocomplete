@@ -1,6 +1,8 @@
+var MongoClient = require('mongodb').MongoClient;
 var request = require('request');
 var express = require('express');
 var app = express();
+var resultsCollection;
 
 app.use('/', express.static('public'));
 
@@ -26,6 +28,12 @@ app.get('/search', function (req, res) {
 	  		}
 	  	}
 	  	console.log(queries);
+	  	resultsCollection.insert(queries.map(function(query) {
+	  		return {
+	  			search: q,
+	  			result: query
+	  		}
+	  	}));
 	  	res.json(queries);
 	  } else {
 	  	res.sendStatus(500);
@@ -33,8 +41,14 @@ app.get('/search', function (req, res) {
 	})
 });
 
-var server = app.listen(process.env.PORT || 3000, function () {
-	var host = server.address().address;
-	var port = server.address().port;
-	console.log('Example app listening at http://%s:%s', host, port);
+MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
+  if(err) { return console.dir(err); }
+  console.log('Connected to database.');
+  resultsCollection = db.collection('results');
+
+  var server = app.listen(process.env.PORT || 3000, function () {
+    var host = server.address().address;
+    var port = server.address().port;
+    console.log('Listening at http://%s:%s', host, port);
+  });
 });
