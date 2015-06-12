@@ -31,9 +31,9 @@
     <div class="row container panel-body">
       <div class="col-lg-4">
         <form class="input-group" id="search">
-          <input type="text" class="form-control" placeholder="Get every autocomplete result" id="query">
+          <input type="text" class="form-control" id="query">
           <span class="input-group-btn">
-            <input class="btn btn-default" type="submit" value="Search"></input>
+            <input class="btn btn-default" type="submit" value="everyautocomplete"></input>
           </span>
         </form>
       </div>
@@ -74,13 +74,40 @@ function plusToSpace(str) {
   return  str.replace(/\+/g, ' ');
 }
 
+var placeholders = [
+'can love',
+'can you save',
+'can you say',
+'does it matter if',
+'does love',
+'how could someone say',
+'i accidentally',
+'i hope that',
+'is it normal to',
+'is it possible to',
+'what does it mean when',
+'why do i act',
+'why do i feel',
+'why do i think',
+'why do people',
+'why is life',
+'why would someone say'
+];
+
 $(function() {
   $('#search').submit(function(e) {
     e.preventDefault();
     var query = $('#query').val();
+    if(!query) {
+      query = $('#query').attr('placeholder');
+      $('#query').val(query);
+    }
     window.location.hash = spaceToPlus(query);
     search(query);
   })
+
+  var placeholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+  $('#query').attr('placeholder', placeholder);
 
   if(window.location.hash) {
     var query = plusToSpace(window.location.hash.substr(1));
