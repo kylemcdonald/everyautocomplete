@@ -5,7 +5,7 @@ var request = require('request');
 var express = require('express');
 var app = express();
 var resultsCollection;
-var alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+var alphabet = ' abcdefghijklmnopqrstuvwxyz'.split('');
 
 function getSuggestions(text, callback) {
 	request({
